@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,13 +16,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.controllers.UserController;
 import com.example.demo.model.User;
 import com.example.demo.repo.UserRepository;
 
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-	
+	Logger logger=LoggerFactory.getLogger(UserService.class);
+
 	@Autowired
 	UserRepository repo;
 	
@@ -59,6 +63,8 @@ public class UserService implements UserDetailsService {
 	@Cacheable(key = "#userid",value = "User")
 	public User getUser(long userid) {
 		Optional<User> uu=repo.findById(userid);
+		logger.debug("user is present:"+uu.isPresent());
+		logger.debug("user:"+uu.get());
 		return uu.isPresent()==true?uu.get():null;
 	}
 }
