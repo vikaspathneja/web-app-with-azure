@@ -27,6 +27,7 @@ public class UserController {
 	@Autowired
 	UserService userservice;
 
+	Logger logger=LoggerFactory.getLogger(UserController.class);
 //	@Autowired
 //	RedisTemplate<String,Object> redisTemplate;
 //
@@ -78,8 +79,12 @@ public class UserController {
 
 	@GetMapping(path = "/{uid}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getUser(@PathVariable(name = "uid") String uid) {
+		logger.debug("uid:"+uid);
 		User user = userservice.getUser(Long.valueOf(uid));
+		logger.debug("user:"+user);
 		Optional<User> opt = Optional.ofNullable(user);
+		logger.debug("opt is present: "+opt.isPresent());
+		logger.debug("user object in optional: "+opt.get());
 		return opt.isPresent() == true ? ResponseEntity.status(HttpStatus.OK).body(opt.get())
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	}
