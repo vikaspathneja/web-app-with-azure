@@ -79,6 +79,7 @@ public class UserController {
 
 	@GetMapping(path = "/{uid}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> getUser(@PathVariable(name = "uid") String uid) {
+		logger.debug("env Map:"+System.getenv());
 		System.out.println("isDebugenabled:"+logger.isDebugEnabled());
 		logger.debug("uid:"+uid);
 		User user = userservice.getUser(Long.valueOf(uid));
